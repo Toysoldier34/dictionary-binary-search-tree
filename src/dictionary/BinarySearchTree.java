@@ -99,26 +99,26 @@ public class BinarySearchTree {
 		} else {
 			return false;
 		}
-	}
+	}// end add
 
 
 	// accepts sorted list and adds it to tree recursively
-	public void addList(List<String> list) {
+	public void addList(List<List<String>> list) {
 		System.out.println();
 
 		int size = list.size();
 		int half = (size / 2) - 1;
 		System.out.println("size:" + size + " half:" + half + "/" + list.get(half) + " " + list);
 
-		if (list.size() >= 2) {//
+		if (list.size() >= 2) {
 
-			if ((list.size() % 2) == 1)
+			if ((list.size() % 2) == 1) {  //corrects halfway value for odd size lists
 				half++;
-
-			List<String> left = new ArrayList<String>(list.subList(0, half));
+			}
+			List<List<String>> left = new ArrayList<List<String>>(list.subList(0, half));
 			System.out.println("left" + left);
 
-			List<String> right = new ArrayList<String>(list.subList(half + 1, size));
+			List<List<String>> right = new ArrayList<List<String>>(list.subList(half + 1, size));
 			System.out.println("right" + right);
 
 			System.out.println("Adding: " + list.get(half));
@@ -143,30 +143,31 @@ public class BinarySearchTree {
 	}// end addList
 
 
-	private void splitAdd(String item) {
-		String word;
-		String definition;
+	//splits word and definition into separate values
+	private void splitAdd(List<String> list) {
+		String word = list.get(0);
+		String definition = list.get(1);
 		add(word, definition);
-	}
+	}// end splitAdd
 
 
 	// get the size of the BST
 	public int size() {
 		return size;
-	}
+	}// end size
 
 
 	// return a boolean to indicate is BST is empty
 	public boolean isEmpty() {
 		return size == 0;
-	}
+	}// end isEmpty
 
 
 	// clear the BST
 	public void clear() {
 		root = null;
 		size = 0;
-	}
+	}// end clear
 
 
 	// Contains iterative method
@@ -189,7 +190,7 @@ public class BinarySearchTree {
 			}
 		}
 		return false;
-	}
+	}// end contains
 
 
 	// remove an word from the tree if it exists -- recursively
@@ -271,12 +272,6 @@ public class BinarySearchTree {
 	}// end findMin
 
 
-	/*
-	 * // recursive findMin private Node findMin(Node node) { if (node == null)
-	 * return null; else if (node.left == null) return node; return
-	 * findMin(node.left); }
-	 */
-
 	/******* TRAVERSALS **********************/
 	// recursive version of inorder traversal
 	public void recursiveInOrder() {
@@ -291,7 +286,7 @@ public class BinarySearchTree {
 		recursiveInOrder(n.left);
 		System.out.println(n.word);
 		recursiveInOrder(n.right);
-	}
+	}// end recursiveInOrder
 
 
 	// traverse the tree in breadth order
