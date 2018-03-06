@@ -14,7 +14,7 @@ import java.util.Queue;
 
 
 // Binary Search Tree that has an invariant that no duplicate data is allowed
-public class BinarySearchTree<T extends Comparable<? super T>> {
+public class BinarySearchTree {
 
 	// root of tree
 	private Node root;
@@ -24,9 +24,8 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 	// we will be accessing the internal members of this
 	// class directly
 	protected class Node {
-		private T element;
-		//private String word;  //key
-		private String definition;  //value
+		private String word;
+		private String definition; // value
 		private Node left;
 		private Node right;
 		int height;
@@ -34,8 +33,8 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 
 
 		// constructor for Node
-		public Node(T element, String definition, int depth) {
-			this.element = element;
+		public Node(String word, String definition, int depth) {
+			this.word = word;
 			this.definition = definition;
 			this.left = null;
 			this.right = null;
@@ -45,10 +44,10 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 
 		// toString for Node class
 		public String toString() {
-			String string = element + ": " + definition;
+			String string = word + ": " + definition;
 			return string;
 		}
-	}//end inner class Node
+	}// end inner class Node
 
 
 	// constructor for the tree itself
@@ -59,41 +58,41 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 
 	// constructor for the tree that takes a starting
 	// root node
-	public BinarySearchTree(T element, String definition) {
-		root = new Node(element, definition, 0);
+	public BinarySearchTree(String word, String definition) {
+		root = new Node(word, definition, 0);
 		size++;
-	}//end constructor
+	}// end constructor
 
 
 	// Add method recursive version
-	public boolean add(T element, String definition) {
+	public boolean add(String word, String definition) {
 		if (root == null) {
-			root = new Node(element, definition, 0);
+			root = new Node(word, definition, 0);
 			size++;
 			return true;
 		}
-		return add(element, definition, root, 0);
+		return add(word, definition, root, 0);
 	}
 
 
-	private boolean add(T element, String definition, Node current, int depth) {
-		// find the element in the BST
-		int comp = element.compareTo(current.element);
+	private boolean add(String word, String definition, Node current, int depth) {
+		// find the word in the BST
+		int comp = word.compareTo(current.word);
 
 		if (comp != 0) {
 			// test results of comparison
 			if (comp < 0) { // search left
 				if (current.left != null) {
-					return add(element, definition, current.left, depth + 1);
+					return add(word, definition, current.left, depth + 1);
 				} else {
-					current.left = new Node(element, definition, depth + 1);
+					current.left = new Node(word, definition, depth + 1);
 					return true;
 				}
 			} else { // search right
 				if (current.right != null) {
-					return add(element, definition, current.right, depth + 1);
+					return add(word, definition, current.right, depth + 1);
 				} else {
-					current.right = new Node(element, definition, depth + 1);
+					current.right = new Node(word, definition, depth + 1);
 					return true;
 				}
 			}
@@ -102,57 +101,54 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 		}
 	}
 
-	
-	
+
 	// accepts sorted list and adds it to tree recursively
-	public void addList(List<T> list) {
+	public void addList(List<String> list) {
 		System.out.println();
-		
-		
+
 		int size = list.size();
 		int half = (size / 2) - 1;
-		System.out.println("size:"+size+" half:"+half+ "/"+ list.get(half) +" "+list);
+		System.out.println("size:" + size + " half:" + half + "/" + list.get(half) + " " + list);
 
 		if (list.size() >= 2) {//
 
-			if ((list.size() % 2) == 1) half++;
-			
-			List<T> left = new ArrayList<T>(list.subList(0, half));
+			if ((list.size() % 2) == 1)
+				half++;
+
+			List<String> left = new ArrayList<String>(list.subList(0, half));
 			System.out.println("left" + left);
 
-			List<T> right = new ArrayList<T>(list.subList(half+1, size));
+			List<String> right = new ArrayList<String>(list.subList(half + 1, size));
 			System.out.println("right" + right);
-			
-			
+
 			System.out.println("Adding: " + list.get(half));
 			splitAdd(list.get(half));
-			
+
 			if (left.size() > 1) {
 				addList(left);
 			} else {
 				System.out.println("Adding: Solo L " + left);
 				splitAdd(list.get(0));
 			}
-			
+
 			if (right.size() > 1) {
 				addList(right);
 			} else {
 				System.out.println("Adding Solo R " + right);
-				splitAdd(list.get(half+1));
+				splitAdd(list.get(half + 1));
 			}
-			
+
 		}
-		
+
 	}// end addList
 
-	
+
 	private void splitAdd(String item) {
-		String element;
+		String word;
 		String definition;
-		add(element, definition);
+		add(word, definition);
 	}
-	
-	
+
 
 	// get the size of the BST
 	public int size() {
@@ -174,7 +170,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 
 
 	// Contains iterative method
-	public boolean contains(T element) {
+	public boolean contains(String word) {
 		if (root == null) {
 			return false;
 		}
@@ -183,7 +179,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 		int comp;
 		while (current != null) {
 
-			comp = element.compareTo(current.element);
+			comp = word.compareTo(current.word);
 			if (comp < 0) {
 				current = current.left;
 			} else if (comp > 0) {
@@ -196,39 +192,26 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 	}
 
 
-	/*
-	 * public boolean contains(T element) { return contains(element, root); }
-	 * 
-	 * // test whether our BST contains an element private boolean contains(T
-	 * element, Node current) { if (current == null) { return false; }
-	 * 
-	 * int compare = element.compareTo(current.element);
-	 * 
-	 * if (compare < 0) { // search element is smaller than current node's element
-	 * return contains(element, current.left); } else if (compare > 0) { // search
-	 * element is larger than current node's element return contains(element,
-	 * current.right); } else { // they are the same -- found it! return true; } }
-	 */
-	// remove an element from the tree if it exists -- recursively
-	public void delete(T element) {
-		root = delete(element, root);
+	// remove an word from the tree if it exists -- recursively
+	public void delete(String word) {
+		root = delete(word, root);
 	}
 
 
-	private Node delete(T element, Node current) {
+	private Node delete(String word, Node current) {
 		if (current == null) {
 			return current;
 		}
 
-		// find the element in the BST
-		int comp = element.compareTo(current.element);
+		// find the word in the BST
+		int comp = word.compareTo(current.word);
 
 		// test results of comparison
 		if (comp < 0) { // search left
-			current.left = delete(element, current.left);
+			current.left = delete(word, current.left);
 		} else if (comp > 0) { // search right
-			current.right = delete(element, current.right);
-		} else { // found the element we want to delete
+			current.right = delete(word, current.right);
+		} else { // found the word we want to delete
 
 			if (current.right == null) { // one or no children to the left
 				current = current.left;
@@ -238,14 +221,14 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 				size--;
 			} else { // two children
 				Node minRight = findMin(current.right);
-				current.element = minRight.element;
+				current.word = minRight.word;
 
 				// now delete the min value's original node
-				current.right = delete(minRight.element, current.right);
+				current.right = delete(minRight.word, current.right);
 			}
 		}
 		return current;
-	}
+	}// end delete
 
 
 	// iterative findMax helper public
@@ -265,7 +248,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 			current = current.right;
 		} // end while
 		return node;
-	}
+	}// end findMax
 
 
 	// iterative findMin helper public
@@ -285,12 +268,11 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 			current = current.left;
 		} // end while
 		return node;
-	}
+	}// end findMin
 
 
 	/*
-	 * // recursive findMin 
-	 * private Node findMin(Node node) { if (node == null)
+	 * // recursive findMin private Node findMin(Node node) { if (node == null)
 	 * return null; else if (node.left == null) return node; return
 	 * findMin(node.left); }
 	 */
@@ -307,76 +289,39 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
 		if (n == null)
 			return;
 		recursiveInOrder(n.left);
-		System.out.println(n.element);
+		System.out.println(n.word);
 		recursiveInOrder(n.right);
 	}
 
-	
-	
-	/*
-	//traverse the tree in breadth order
+
+	// traverse the tree in breadth order
 	public void breadthTraversal() {
-		if (root ==  null) return;
-		
-		//need a queue
+		if (root == null)
+			return;
+
+		// need a queue
 		Queue<Node> queue = new LinkedList<>();
-		
-//		int depth = root.depth;
-		Node current = root;
-		queue.add(current);
-		
-		//process the nodes that are enqueued
-		while (!queue.isEmpty()) {
-			current = queue.remove();
-			//are we at the next level?
-//			if (depth != current.depth) {
-//				System.out.println();
-//				depth = current.depth;	
-//			}
-//			String color = (isRed(current)) ? "R" : "B";  //set the color part of string
-			System.out.print(current.element + "--");
-			
-			//enqueue the children
-			if (current.left != null) queue.add(current.left);
-			if (current.right!= null) queue.add(current.right);
-		}
-	}//end breadthTraversal
-	*/
-	
-	
-	//traverse the tree in breadth order
-	public void breadthTraversal() {
-		if (root ==  null) return;
-		
-		//need a queue
-		Queue<Node> queue = new LinkedList<>();
-		
+
 		int depth = root.depth;
 		Node current = root;
 		queue.add(current);
-		
-		//process the nodes that are enqueued
+
+		// process the nodes that are enqueued
 		while (!queue.isEmpty()) {
 			current = queue.remove();
-			//are we at the next level?
+			// are we at the next level?
 			if (depth != current.depth) {
 				System.out.println();
-				depth = current.depth;	
+				depth = current.depth;
 			}
-			//String color = (isRed(current)) ? "R" : "B";  //set the color part of string
-			System.out.print(current.element + "-" +  "-" + current.depth + " ");
-			
-			//enqueue the children
-			if (current.left != null) queue.add(current.left);
-			if (current.right!= null) queue.add(current.right);
+			System.out.print(current.word + ": " + current.depth + " ");
+
+			// enqueue the children
+			if (current.left != null)
+				queue.add(current.left);
+			if (current.right != null)
+				queue.add(current.right);
 		}
-	}//end breadthTraversal
-	
-	
-	
-	
-}//end class
+	}// end breadthTraversal
 
-
-
-
+}// end class
