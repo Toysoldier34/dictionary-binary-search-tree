@@ -7,6 +7,7 @@
 
 package dictionary;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Queue;
 
 
 // Binary Search Tree that has an invariant that no duplicate data is allowed
-public class BinarySearchTree {
+public class BinarySearchTree implements Serializable{
 
 	// root of tree
 	private Node root;
@@ -23,9 +24,9 @@ public class BinarySearchTree {
 	// internal class that defines a node's structure
 	// we will be accessing the internal members of this
 	// class directly
-	protected class Node {
-		private String word;
-		private String definition; // value
+	protected class Node implements Serializable{
+		String word;
+		String definition; // value
 		private Node left;
 		private Node right;
 		int height;
@@ -47,6 +48,7 @@ public class BinarySearchTree {
 			String string = word + ": " + definition;
 			return string;
 		}
+		
 	}// end inner class Node
 
 
@@ -186,6 +188,7 @@ public class BinarySearchTree {
 			} else if (comp > 0) {
 				current = current.right;
 			} else if (comp == 0) {
+				System.out.println(current.toString());
 				return true;
 			}
 		}
