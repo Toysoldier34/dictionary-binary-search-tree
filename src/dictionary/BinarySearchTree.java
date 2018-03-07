@@ -103,39 +103,39 @@ public class BinarySearchTree {
 
 
 	// accepts sorted list and adds it to tree recursively
-	public void addList(List<List<String>> list) {
-		System.out.println();
+	public void addList(ArrayList<ArrayList<String>> arrayList) {
+		//System.out.println();
 
-		int size = list.size();
+		int size = arrayList.size();
 		int half = (size / 2) - 1;
-		System.out.println("size:" + size + " half:" + half + "/" + list.get(half) + " " + list);
+		//System.out.println("size:" + size + " half:" + half + "/" + arrayList.get(half) + " " + arrayList);
 
-		if (list.size() >= 2) {
+		if (arrayList.size() >= 2) {
 
-			if ((list.size() % 2) == 1) {  //corrects halfway value for odd size lists
+			if ((arrayList.size() % 2) == 1) {  //corrects halfway value for odd size lists
 				half++;
 			}
-			List<List<String>> left = new ArrayList<List<String>>(list.subList(0, half));
-			System.out.println("left" + left);
+			ArrayList<ArrayList<String>> left = new ArrayList<ArrayList<String>>(arrayList.subList(0, half));
+			//System.out.println("left" + left);
 
-			List<List<String>> right = new ArrayList<List<String>>(list.subList(half + 1, size));
-			System.out.println("right" + right);
+			ArrayList<ArrayList<String>> right = new ArrayList<ArrayList<String>>(arrayList.subList(half + 1, size));
+			//System.out.println("right" + right);
 
-			System.out.println("Adding: " + list.get(half));
-			splitAdd(list.get(half));
+			//System.out.println("Adding: " + arrayList.get(half));
+			splitAdd(arrayList.get(half));
 
 			if (left.size() > 1) {
 				addList(left);
 			} else {
-				System.out.println("Adding: Solo L " + left);
-				splitAdd(list.get(0));
+				//System.out.println("Adding: Solo L " + left);
+				splitAdd(arrayList.get(0));
 			}
 
 			if (right.size() > 1) {
 				addList(right);
 			} else {
-				System.out.println("Adding Solo R " + right);
-				splitAdd(list.get(half + 1));
+				//System.out.println("Adding Solo R " + right);
+				splitAdd(arrayList.get(half + 1));
 			}
 
 		}
