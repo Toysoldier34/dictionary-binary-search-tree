@@ -16,59 +16,64 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * allows for the loading and saving of dictionary files
+ * allows ability to search dictionary 
+ * 
+ * @author Tony Thompson
+ *
+ */
 public class DictionaryDriver {
 
-	public static void main(String[] args) {
+	static BinarySearchTree bst = new BinarySearchTree();
 
+
+	/**
+	 * allows for the loading and saving of dictionary files
+	 * allows ability to search dictionary
+	 * @param args
+	 */
+	public static void main(String[] args) {
 		boolean killProgram = false;
 		System.out.println("Dictionary Search");
 
-		BinarySearchTree bst = new BinarySearchTree();
-		//bst.addList(parseList("dictionary.txt"));
-
-		// bst.breadthTraversal();
-
-		
 		/*
 		 * main loop of program prompts user for action then executes the action
 		 * prompting user for next choice
 		 */
 		while (!killProgram) {
 			Console.printMenu();
-			killProgram = menuChoice(Console.getInt("Enter number for desired action"), bst);
+			killProgram = menuChoice(Console.getInt("Enter number for desired action"));
 		} // end while
-		bst.recursiveInOrder();
-		bst.findMin();
-		bst.findMax();
+			// bst.breadthTraversal();
+			// bst.recursiveInOrder();
 
+		System.out.println("Program exiting");
 		System.exit(0);
 	}// end main
 
 
 	// triggers action based on menu choice
-	private static boolean menuChoice(int choice, BinarySearchTree bst) {
+	private static boolean menuChoice(int choice) {
 		switch (choice) { // cases match corresponding menu items
 			case 1:
-				//bst.addList(parseList(Console.getString("Enter dictionary file name \n dictionary.txt")));
 				bst.addList(parseList("dictionary.txt"));
 				return false;
 			case 2:
-				//bst.addList(parseList(Console.getString("Enter dictionary file name \n dictionary2.txt")));
-				bst = loadSerialFile();
+				loadSerialFile();
 				return false;
 			case 3:
 				String word = Console.getString("Enter word to search for");
+				word = word.toLowerCase();
 				boolean contains = bst.contains(word);
 				if (!contains) { // contains prints message if found
 					System.out.println(word + " is not found within the dictionary.");
 				}
 				return false;
 			case 4: // page history + session
-				saveToFile(bst);
+				saveToFile();
 				return false;
 			case 5:
 				return true; // breaks main loop ending program
@@ -79,52 +84,51 @@ public class DictionaryDriver {
 	}// end menuChoice
 
 
-	private static void saveToFile(BinarySearchTree bst) {
-		try {
+	//serializes and saves BinarySearchTree bst to file
+	private static void saveToFile() {
+		try {  //basic file i/o out
 			FileOutputStream fout = new FileOutputStream("dictionary2.txt");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 			oos.writeObject(bst);
+			oos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}// end saveToFile
 
-	
-	private static BinarySearchTree loadSerialFile() {
-		ObjectInputStream objectinputstream = null;
-		BinarySearchTree bst = new BinarySearchTree();
-		try {
-		    FileInputStream streamIn = new FileInputStream("dictionary2.txt");
-		    objectinputstream = new ObjectInputStream(streamIn);
-		    bst = (BinarySearchTree) objectinputstream.readObject();
-		    System.out.println(bst.toString());
-		} catch (Exception e) {
-		    e.printStackTrace();
-		} finally {
-		    if(objectinputstream != null){
-		        try {
-					objectinputstream .close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		    } 
-		}
-		return bst;
-	}//end loadSerialFile
 
-	public static ArrayList<ArrayList<String>> parseList(String file) {
+	//deserializes and loads BinarySearchTree bst from file
+	private static void loadSerialFile() {
+		ObjectInputStream objectinputstream = null;
+		try {
+			FileInputStream streamIn = new FileInputStream("dictionary2.txt");
+			objectinputstream = new ObjectInputStream(streamIn);
+			bst = (BinarySearchTree) objectinputstream.readObject();
+		} catch (Exception e) { e.printStackTrace();
+		} finally {
+			if (objectinputstream != null) {
+				try {
+					objectinputstream.close();
+				} catch (IOException e) { e.printStackTrace();
+				}
+			}
+		}
+	}// end loadSerialFile
+
+
+	//takes in text file of words and definitions splitting them into 
+	//an arrayList of pairs that are then sorted by key word
+	private static ArrayList<ArrayList<String>> parseList(String file) {
 		ArrayList<String> listRaw = loadFile(file); // get raw file input
 		ArrayList<ArrayList<String>> listSplit = new ArrayList<ArrayList<String>>();
 		for (String line : listRaw) {
-			// System.out.println("Inside parseList line: " + line);
 			ArrayList<String> tempList = new ArrayList<String>();
 			String[] temp = line.split(":"); // split word and definition
-			// System.out.println("temp" + Arrays.toString(temp));
 			tempList.add(temp[0]);
 			tempList.add(temp[1]);
 			listSplit.add(tempList); // add combo to listSplit
 		}
-		// sort list
+		// sort list by key word
 		Collections.sort(listSplit, new Comparator<ArrayList<String>>() {
 			@Override
 			public int compare(ArrayList<String> o1, ArrayList<String> o2) {
@@ -135,27 +139,20 @@ public class DictionaryDriver {
 	}// end parseList
 
 
-	public static ArrayList loadFile(String file) {
+	//loads in unserialized raw text with a single word and definition
+	//pair per line divided by a ":"
+	private static ArrayList<String> loadFile(String file) {
 		Scanner s;
 		ArrayList<String> list = new ArrayList<String>();
 		try {
 			s = new Scanner(new File(file));
 			while (s.hasNextLine()) {
 				list.add(s.nextLine());
-
 			}
 			s.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		} catch (FileNotFoundException e) { e.printStackTrace();
 		}
-		// System.out.println(list);
 		return list;
 	}// end loadFile
 
 }// end class
-
-
-
-
-
-

@@ -14,8 +14,13 @@ import java.util.List;
 import java.util.Queue;
 
 
-// Binary Search Tree that has an invariant that no duplicate data is allowed
-public class BinarySearchTree implements Serializable{
+/**
+ *  Binary Search Tree that has an invariant that no duplicate data is allowed
+ * @author Tony Thompson
+ *
+ */
+@SuppressWarnings("serial")
+public class BinarySearchTree implements Serializable {
 
 	// root of tree
 	private Node root;
@@ -24,7 +29,7 @@ public class BinarySearchTree implements Serializable{
 	// internal class that defines a node's structure
 	// we will be accessing the internal members of this
 	// class directly
-	protected class Node implements Serializable{
+	protected class Node implements Serializable {
 		String word;
 		String definition; // value
 		private Node left;
@@ -33,7 +38,12 @@ public class BinarySearchTree implements Serializable{
 		int depth;
 
 
-		// constructor for Node
+		/**
+		 *  constructor for Node
+		 * @param word String
+		 * @param definition String
+		 * @param depth int
+		 */
 		public Node(String word, String definition, int depth) {
 			this.word = word;
 			this.definition = definition;
@@ -43,30 +53,49 @@ public class BinarySearchTree implements Serializable{
 		}
 
 
-		// toString for Node class
+		/**
+		 *  toString for Node class 
+		 *  returns word and definition
+		 */
 		public String toString() {
 			String string = word + ": " + definition;
 			return string;
 		}
-		
+
 	}// end inner class Node
 
 
-	// constructor for the tree itself
+	/**
+	 * constructor for the tree itself
+	 */
 	public BinarySearchTree() {
 		root = null;
 	}
 
 
-	// constructor for the tree that takes a starting
-	// root node
+	/**
+	 * constructor for the tree that takes a starting root node
+	 * 
+	 * @param word
+	 *            String
+	 * @param definition
+	 *            String
+	 */
 	public BinarySearchTree(String word, String definition) {
 		root = new Node(word, definition, 0);
 		size++;
 	}// end constructor
 
 
-	// Add method recursive version
+	/**
+	 * Add method recursive version
+	 * 
+	 * @param word
+	 *            String
+	 * @param definition
+	 *            String
+	 * @return boolean true if added
+	 */
 	public boolean add(String word, String definition) {
 		if (root == null) {
 			root = new Node(word, definition, 0);
@@ -77,6 +106,7 @@ public class BinarySearchTree implements Serializable{
 	}
 
 
+	// recursive add with helper
 	private boolean add(String word, String definition, Node current, int depth) {
 		// find the word in the BST
 		int comp = word.compareTo(current.word);
@@ -104,48 +134,39 @@ public class BinarySearchTree implements Serializable{
 	}// end add
 
 
-	// accepts sorted list and adds it to tree recursively
+	/**
+	 * accepts sorted list and adds it to tree recursively
+	 * 
+	 * @param arrayList
+	 *            sorted list of word and definition pairs
+	 */
 	public void addList(ArrayList<ArrayList<String>> arrayList) {
-		//System.out.println();
-
 		int size = arrayList.size();
 		int half = (size / 2) - 1;
-		//System.out.println("size:" + size + " half:" + half + "/" + arrayList.get(half) + " " + arrayList);
 
 		if (arrayList.size() >= 2) {
-
-			if ((arrayList.size() % 2) == 1) {  //corrects halfway value for odd size lists
-				half++;
-			}
+			if ((arrayList.size() % 2) == 1)
+				half++; // corrects halfway value for odd size lists
 			ArrayList<ArrayList<String>> left = new ArrayList<ArrayList<String>>(arrayList.subList(0, half));
-			//System.out.println("left" + left);
-
 			ArrayList<ArrayList<String>> right = new ArrayList<ArrayList<String>>(arrayList.subList(half + 1, size));
-			//System.out.println("right" + right);
-
-			//System.out.println("Adding: " + arrayList.get(half));
-			splitAdd(arrayList.get(half));
+			splitAdd(arrayList.get(half)); // adding words here
 
 			if (left.size() > 1) {
 				addList(left);
 			} else {
-				//System.out.println("Adding: Solo L " + left);
 				splitAdd(arrayList.get(0));
-			}
+			} // end if else
 
 			if (right.size() > 1) {
 				addList(right);
 			} else {
-				//System.out.println("Adding Solo R " + right);
 				splitAdd(arrayList.get(half + 1));
-			}
-
-		}
-
+			} // end if else
+		} // end if
 	}// end addList
 
 
-	//splits word and definition into separate values
+	// splits word and definition into separate values
 	private void splitAdd(List<String> list) {
 		String word = list.get(0);
 		String definition = list.get(1);
@@ -153,26 +174,43 @@ public class BinarySearchTree implements Serializable{
 	}// end splitAdd
 
 
-	// get the size of the BST
+	/**
+	 * get the size of the BST
+	 * 
+	 * @return size int
+	 */
 	public int size() {
 		return size;
 	}// end size
 
 
-	// return a boolean to indicate is BST is empty
+	/**
+	 * return a boolean to indicate is BST is empty
+	 * 
+	 * @return boolean
+	 */
 	public boolean isEmpty() {
 		return size == 0;
 	}// end isEmpty
 
 
-	// clear the BST
+	/**
+	 * clear the BST
+	 */
 	public void clear() {
 		root = null;
 		size = 0;
 	}// end clear
 
 
-	// Contains iterative method
+	/**
+	 * Contains iterative method
+	 * 
+	 * @param word
+	 *            String to search for
+	 * @return true if word is found if word is found the word and definition are
+	 *         printed from here
+	 */
 	public boolean contains(String word) {
 		if (root == null) {
 			return false;
@@ -196,7 +234,11 @@ public class BinarySearchTree implements Serializable{
 	}// end contains
 
 
-	// remove an word from the tree if it exists -- recursively
+	/**
+	 * remove an word from the tree if it exists -- recursively
+	 * 
+	 * @param word
+	 */
 	public void delete(String word) {
 		root = delete(word, root);
 	}
@@ -235,7 +277,11 @@ public class BinarySearchTree implements Serializable{
 	}// end delete
 
 
-	// iterative findMax helper public
+	/**
+	 * iterative findMax helper public
+	 * 
+	 * @return node at max position
+	 */
 	public Node findMax() {
 		return findMax(root);
 	}
@@ -255,7 +301,11 @@ public class BinarySearchTree implements Serializable{
 	}// end findMax
 
 
-	// iterative findMin helper public
+	/**
+	 * iterative findMin helper public
+	 * 
+	 * @return node at min position
+	 */
 	public Node findMin() {
 		return findMin(root);
 	}
@@ -276,13 +326,20 @@ public class BinarySearchTree implements Serializable{
 
 
 	/******* TRAVERSALS **********************/
-	// recursive version of inorder traversal
+	/**
+	 * recursive version of inorder traversal
+	 */
 	public void recursiveInOrder() {
 		recursiveInOrder(root);
 	}
 
 
-	// overloaded method
+	/**
+	 * overloaded method
+	 * 
+	 * @param n
+	 *            starting node, helper starts with root
+	 */
 	public void recursiveInOrder(Node n) {
 		if (n == null)
 			return;
@@ -292,7 +349,9 @@ public class BinarySearchTree implements Serializable{
 	}// end recursiveInOrder
 
 
-	// traverse the tree in breadth order
+	/**
+	 * traverse the tree in breadth order
+	 */
 	public void breadthTraversal() {
 		if (root == null)
 			return;
