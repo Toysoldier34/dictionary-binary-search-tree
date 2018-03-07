@@ -352,7 +352,7 @@ public class BinarySearchTree implements Serializable {
 	/**
 	 * traverse the tree in breadth order
 	 */
-	public void breadthTraversal() {
+	public void breadthTraversalPrint() {
 		if (root == null)
 			return;
 
@@ -379,6 +379,40 @@ public class BinarySearchTree implements Serializable {
 			if (current.right != null)
 				queue.add(current.right);
 		}
+	}// end breadthTraversal
+	
+	/**
+	 * traverse the tree in breadth order
+	 */
+	public ArrayList<String> breadthTraversal() {
+		if (root == null)
+			return null;
+
+		// need a queue
+		Queue<Node> queue = new LinkedList<>();
+		ArrayList<String> list = new ArrayList<String>();
+
+		int depth = root.depth;
+		Node current = root;
+		queue.add(current);
+
+		// process the nodes that are enqueued
+		while (!queue.isEmpty()) {
+			current = queue.remove();
+			// are we at the next level?
+			if (depth != current.depth) {
+				list.add("\n");
+				depth = current.depth;
+			}
+			list.add(current.word + ": " + current.definition + " ");
+
+			// enqueue the children
+			if (current.left != null)
+				queue.add(current.left);
+			if (current.right != null)
+				queue.add(current.right);
+		}
+		return list;
 	}// end breadthTraversal
 
 }// end class

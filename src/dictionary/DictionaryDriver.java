@@ -47,8 +47,8 @@ public class DictionaryDriver {
 			Console.printMenu();
 			killProgram = menuChoice(Console.getInt("Enter number for desired action"));
 		} // end while
-			// bst.breadthTraversal();
-			// bst.recursiveInOrder();
+		// bst.breadthTraversal();
+		// bst.recursiveInOrder();
 
 		System.out.println("Program exiting");
 		System.exit(0);
@@ -62,6 +62,7 @@ public class DictionaryDriver {
 				bst.addList(parseList("dictionary.txt"));
 				return false;
 			case 2:
+				//bst.addList(parseList("dictionary2.txt"));
 				loadSerialFile();
 				return false;
 			case 3:
@@ -86,6 +87,7 @@ public class DictionaryDriver {
 
 	//serializes and saves BinarySearchTree bst to file
 	private static void saveToFile() {
+		
 		try {  //basic file i/o out
 			FileOutputStream fout = new FileOutputStream("dictionary2.txt");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
@@ -94,6 +96,23 @@ public class DictionaryDriver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		/* 
+		 * alternative
+		 *
+		try {
+		ArrayList<String> list = bst.breadthTraversal();
+		FileWriter writer = new FileWriter("dictionary2.txt"); 
+		for(String line: list) {
+		  writer.write(line);
+		}
+		
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 	}// end saveToFile
 
 
